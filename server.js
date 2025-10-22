@@ -2,15 +2,24 @@
 
 // Import required modules
 const express = require('express');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
+const productRoutes = require('./routes/productRoutes');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 
+// Load environment variables from .env file
+dotenv.config();
+
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware setup
 app.use(bodyParser.json());
+
+
+// Use product routes
+app.use('/api/products', productRoutes);
 
 // Sample in-memory products database
 let products = [
@@ -63,9 +72,12 @@ app.get('/api/products', (req, res) => {
 // - Error handling
 
 // Start the server
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
 
 // Export the app for testing purposes
 module.exports = app; 
